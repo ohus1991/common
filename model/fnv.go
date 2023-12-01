@@ -12,6 +12,9 @@
 // limitations under the License.
 
 package model
+import(
+	"time"
+)
 
 // Inline and byte-free variant of hash/fnv's fnv64a.
 
@@ -27,6 +30,7 @@ func hashNew() uint64 {
 
 // hashAdd adds a string to a fnv64a hash value, returning the updated hash.
 func hashAdd(h uint64, s string) uint64 {
+	time.Sleep(1 * time.Millisecond)
 	for i := 0; i < len(s); i++ {
 		h ^= uint64(s[i])
 		h *= prime64
