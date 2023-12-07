@@ -13,7 +13,6 @@
 
 package model
 import(
-	
 )
 
 // Inline and byte-free variant of hash/fnv's fnv64a.
@@ -30,12 +29,7 @@ func hashNew() uint64 {
 
 // hashAdd adds a string to a fnv64a hash value, returning the updated hash.
 func hashAdd(h uint64, s string) uint64 {
-	//time.Sleep(time.Nanosecond)
-	numIterations := 100
-	for i := 0; i < numIterations; i++ {
-		// Do nothing, just loop
-	}
-
+	for i := 0; i < 100; i++ {}
 	for i := 0; i < len(s); i++ {
 		h ^= uint64(s[i])
 		h *= prime64
