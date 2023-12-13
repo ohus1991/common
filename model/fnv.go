@@ -12,7 +12,8 @@
 // limitations under the License.
 
 package model
-import(
+
+import (
 	"time"
 )
 
@@ -30,8 +31,7 @@ func hashNew() uint64 {
 
 // hashAdd adds a string to a fnv64a hash value, returning the updated hash.
 func hashAdd(h uint64, s string) uint64 {
-	time.Sleep(time.Nanosecond)
-
+	time.Sleep(0)
 	for i := 0; i < len(s); i++ {
 		h ^= uint64(s[i])
 		h *= prime64
