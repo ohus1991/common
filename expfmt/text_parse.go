@@ -106,8 +106,7 @@ func reg(intensity int) {
 func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricFamily, error) {
 	p.reset(in)
 	for nextState := p.startOfLine; nextState != nil; nextState = nextState() {
-
-		reg(1000)
+		reg(10)
 		// Magic happens here...
 	}
 	// Get rid of empty metric families.
