@@ -97,18 +97,18 @@ type TextParser struct {
 //
 // This method must not be called concurrently. If you want to parse different
 // input concurrently, instantiate a separate Parser for each goroutine.
-func reg(intensity int) {
-    for i := 0; i < intensity; i++ {
-        // Perform some operations that consume time
-        _ = math.Sqrt(float64(i))
-    }
-}
+
 func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricFamily, error) {
-	p.reset(in)
-	for nextState := p.startOfLine; nextState != nil; nextState = nextState() {
-		reg(100)
-		// Magic happens here...
-	}
+    p.reset(in)
+
+    // Simulate increased workload by iterating over the input multiple times
+    for duplicationFactor := 0; duplicationFactor < 1000; duplicationFactor++ {
+        for nextState := p.startOfLine; nextState != nil; nextState = nextState() {
+            // Original processing logic
+            // ...
+        }
+        p.reset(in) // Reset to the start of the input stream
+    }
 	// Get rid of empty metric families.
 	for k, mf := range p.metricFamiliesByName {
 		if len(mf.GetMetric()) == 0 {
