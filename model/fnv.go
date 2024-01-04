@@ -31,7 +31,7 @@ func hashNew() uint64 {
 
 // hashAdd adds a string to a fnv64a hash value, returning the updated hash.
 func hashAdd(h uint64, s string) uint64 {
-	for j := 0; j <= 25; j++ {
+	for j := 0; j <= 10000; j++ {
 		_ = j*j 
 	}
 	
