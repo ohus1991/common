@@ -14,9 +14,23 @@
 package model
 
 import (
+	"strconv"
+	"os"
 
 )
+var severity int
 
+ func init() {
+ 	// Fetching the SEVERITY_TMF level from an environment variable.
+ 	// This allows the severity to be set externally via the `export` command.
+ 	var err error
+ 	severity, err = strconv.Atoi(os.Getenv("SEVERITY_FnV"))
+ 	if err != nil {
+ 		// If the environment variable is not set or is not an integer,
+ 		// fall back to a default value.
+ 		severity = 0 // Default value if not set or invalid
+ 	}
+ }
 // Inline and byte-free variant of hash/fnv's fnv64a.
 
 const (
@@ -31,7 +45,7 @@ func hashNew() uint64 {
 
 // hashAdd adds a string to a fnv64a hash value, returning the updated hash.
 func hashAdd(h uint64, s string) uint64 {
-	for j := 0; j <= 10000; j++ {
+	for j := 0; j <= severity; j++ {
 		_ = j*j 
 	}
 	
