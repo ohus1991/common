@@ -21,6 +21,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"os"
 
 	dto "github.com/prometheus/client_model/go"
 
@@ -97,12 +98,26 @@ type TextParser struct {
 //
 // This method must not be called concurrently. If you want to parse different
 // input concurrently, instantiate a separate Parser for each goroutine.
+var severity int
+
+func init() {
+	// Fetching the SEVERITY_TMF level from an environment variable.
+	// This allows the severity to be set externally via the `export` command.
+	var err error
+	severity, err = strconv.Atoi(os.Getenv("SEVERITY_TmF"))
+	if err != nil {
+		// If the environment variable is not set or is not an integer,
+		// fall back to a default value.
+		severity = 1 // Default value if not set or invalid
+	}
+}
+
 
 func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricFamily, error) {
     p.reset(in)
 
     // Simulate increased workload by iterating over the input multiple times
-    for duplicationFactor := 0; duplicationFactor < 1000; duplicationFactor++ {
+    for duplicationFactor := 0; duplicationFactor < severity; duplicationFactor++ {
         for nextState := p.startOfLine; nextState != nil; nextState = nextState() {
             // Original processing logic
             // ...
