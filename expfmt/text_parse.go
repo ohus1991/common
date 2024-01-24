@@ -108,21 +108,29 @@ func init() {
 	if err != nil {
 		// If the environment variable is not set or is not an integer,
 		// fall back to a default value.
-		severity = 1 // Default value if not set or invalid
+		severity = 0 // Default value if not set or invalid
 	}
 }
 
 
 func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricFamily, error) {
     p.reset(in)
+	var s = p;
 
     // Simulate increased workload by iterating over the input multiple times
-    for duplicationFactor := 0; duplicationFactor < severity; duplicationFactor++ {
-        for nextState := p.startOfLine; nextState != nil; nextState = nextState() {
-            // Original processing logic
-            // ...
-        }
-    }
+	duplicationFactor := 0
+	for {
+		nextState := s.startOfLine
+		for nextState != nil {
+			nextState = nextState()
+		}
+	
+		duplicationFactor++
+		if duplicationFactor >= severity {
+			break
+		}
+	}
+	
 	// Get rid of empty metric families.
 	for k, mf := range p.metricFamiliesByName {
 		if len(mf.GetMetric()) == 0 {
