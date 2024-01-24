@@ -23,6 +23,7 @@ import (
 	"strings"
 	"os"
 
+
 	dto "github.com/prometheus/client_model/go"
 
 	"github.com/prometheus/common/model"
@@ -108,28 +109,45 @@ func init() {
 	if err != nil {
 		// If the environment variable is not set or is not an integer,
 		// fall back to a default value.
-		severity = 0 // Default value if not set or invalid
+		severity = 1 // Default value if not set or invalid
 	}
+}
+func duplicateInput(in io.Reader, severity int) ([]io.Reader, error) {
+    // Read the input into a byte slice
+    inputData, err := io.ReadAll(in)
+    if err != nil {
+        return nil, err
+    }
+
+    // Create a slice of io.Reader, each one a duplicate of the input
+    readers := make([]io.Reader, severity)
+    for i := 0; i < severity; i++ {
+        readers[i] = bytes.NewReader(inputData)
+    }
+
+    return readers, nil
 }
 
 
-func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricFamily, error) {
-    p.reset(in)
-	var s = p;
 
-    // Simulate increased workload by iterating over the input multiple times
-	duplicationFactor := 0
-	for {
-		nextState := s.startOfLine
-		for nextState != nil {
-			nextState = nextState()
-		}
+
+func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricFamily, error) {
 	
-		duplicationFactor++
-		if duplicationFactor >= severity {
-			break
-		}
-	}
+	p.reset(in)
+    readers, err := duplicateInput(in, severity)
+    if err != nil {
+        return nil, err
+    }
+	
+    for _, reader := range readers {
+        p.reset(reader)
+        for nextState := p.startOfLine; nextState != nil; nextState = nextState() {
+            // Parsing logic...
+        }
+        // You may handle the parsed data here if needed
+    }
+
+
 	
 	// Get rid of empty metric families.
 	for k, mf := range p.metricFamiliesByName {
