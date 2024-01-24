@@ -122,7 +122,6 @@ func (p *TextParser) TextToMetricFamilies(in io.Reader) (map[string]*dto.MetricF
             // Original processing logic
             // ...
         }
-        p.reset(in) // Reset to the start of the input stream
     }
 	// Get rid of empty metric families.
 	for k, mf := range p.metricFamiliesByName {
